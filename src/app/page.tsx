@@ -174,7 +174,7 @@ export default function MarsdenCRM() {
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
       {/* Top bar */}
       <header style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
-        <div className="max-w-7xl mx-auto flex items-center gap-8 px-8 py-4">
+        <div style={{ maxWidth: 1280, margin: "0 auto" }} className="flex items-center gap-8 px-8 py-4">
           <div className="flex items-center gap-3">
             <div style={{ width: 30, height: 30, background: "var(--accent)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 15, letterSpacing: "-0.02em" }}>
               M
@@ -195,7 +195,7 @@ export default function MarsdenCRM() {
         </div>
 
         {/* Tab nav — separate row, more space */}
-        <div className="max-w-7xl mx-auto px-8">
+        <div style={{ maxWidth: 1280, margin: "0 auto" }} className="px-8">
           <nav className="flex items-center gap-1">
             {TABS.map((t) => (
               <button
@@ -217,7 +217,7 @@ export default function MarsdenCRM() {
       </header>
 
       {/* Stats — inside main content width, with breathing room */}
-      <div className="max-w-7xl mx-auto w-full px-8 pt-8">
+      <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%" }} className="px-8 pt-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "Open leads", value: openLeadsCount },
@@ -234,7 +234,7 @@ export default function MarsdenCRM() {
       </div>
 
       {/* Tab content — constrained width, generous padding */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-8 py-8">
+      <main style={{ maxWidth: 1280, margin: "0 auto", width: "100%" }} className="flex-1 px-8 py-8">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -243,7 +243,7 @@ export default function MarsdenCRM() {
       </main>
 
       <footer style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
-        <div className="max-w-7xl mx-auto px-8 py-4 text-xs flex items-center justify-between flex-wrap gap-2">
+        <div style={{ maxWidth: 1280, margin: "0 auto" }} className="px-8 py-4 text-xs flex items-center justify-between flex-wrap gap-2">
           <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
           <span>Built by Dygiko · v2.4.1</span>
         </div>
