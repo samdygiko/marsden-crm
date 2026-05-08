@@ -234,7 +234,7 @@ export default function MarsdenCRM() {
       </div>
 
       {/* Tab content — constrained width, generous padding */}
-      <main className="flex-1 px-10 py-10 w-full">
+      <main className="flex-1 px-10 py-12 w-full">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -257,7 +257,11 @@ export default function MarsdenCRM() {
 function PipelineTab() {
   const [filter, setFilter] = useState<"All" | LeadStatus>("All");
   const [search, setSearch] = useState("");
-  const filtered = LEADS.filter(l => {
+  const [leads, setLeads] = useState<Lead[]>(LEADS);
+  const [showAdd, setShowAdd] = useState(false);
+  const [draft, setDraft] = useState({ name: "", phone: "", postcode: "", jobType: "", source: "Google" });
+
+  const filtered = leads.filter(l => {
     if (filter !== "All" && l.status !== filter) return false;
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -266,8 +270,17 @@ function PipelineTab() {
     return true;
   });
 
+  function addLead() {
+    if (!draft.name.trim()) return;
+    const nextId = "L-" + (Math.max(...leads.map(l => parseInt(l.id.replace("L-", ""), 10))) + 1).toString();
+    const today = new Date().toISOString().split("T")[0];
+    setLeads([{ id: nextId, name: draft.name, phone: draft.phone, postcode: draft.postcode.toUpperCase(), jobType: draft.jobType, enquiredOn: today, status: "New enquiry", source: draft.source, notes: "" }, ...leads]);
+    setDraft({ name: "", phone: "", postcode: "", jobType: "", source: "Google" });
+    setShowAdd(false);
+  }
+
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
       <div className="flex items-center gap-3 flex-wrap">
         <h2 className="text-xl font-bold tracking-tight">Lead pipeline</h2>
         <span style={{ fontSize: 12, color: "var(--text-faint)" }}>· {filtered.length} of {LEADS.length}</span>
@@ -293,13 +306,13 @@ function PipelineTab() {
           <option>Won</option>
           <option>Lost</option>
         </select>
-        <button className="text-xs font-semibold px-3 py-1.5 rounded-sm" style={{ background: "var(--accent)", color: "#0E1217" }}>
+        <button onClick={() => setShowAdd(true)} className="text-xs font-semibold px-4 py-2 rounded-sm transition-opacity hover:opacity-90" style={{ background: "var(--accent)", color: "#0E1217" }}>
           + Add lead
         </button>
       </div>
 
       <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full text-sm">
+        <table className="w-full" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Customer", "Job type", "Postcode", "Enquired", "Status", "Quote £", "Source"].map((h) => (
@@ -312,16 +325,16 @@ function PipelineTab() {
           <tbody>
             {filtered.map((l) => (
               <tr key={l.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-5 px-6">
+                <td className="py-6 px-6">
                   <div className="font-semibold">{l.name}</div>
                   <div style={{ fontSize: 11, color: "var(--text-faint)" }}>{l.phone} · {l.id}</div>
                 </td>
-                <td className="py-5 px-6" style={{ color: "var(--text-muted)" }}>{l.jobType}</td>
-                <td className="py-5 px-6" style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, color: "var(--text-muted)" }}>{l.postcode}</td>
-                <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(l.enquiredOn)}</td>
-                <td className="py-5 px-6"><StatusPill status={l.status} /></td>
-                <td className="py-3 px-4 font-semibold" style={{ color: l.value ? "var(--text)" : "var(--text-faint)" }}>{fmtMoney(l.value)}</td>
-                <td className="py-3 px-4 text-xs" style={{ color: "var(--text-muted)" }}>{l.source}</td>
+                <td className="py-6 px-6" style={{ color: "var(--text-muted)" }}>{l.jobType}</td>
+                <td className="py-6 px-6" style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, color: "var(--text-muted)" }}>{l.postcode}</td>
+                <td className="py-6 px-6 text-sm" style={{ color: "var(--text-faint)" }}>{fmtDate(l.enquiredOn)}</td>
+                <td className="py-6 px-6"><StatusPill status={l.status} /></td>
+                <td className="py-6 px-6 font-semibold" style={{ color: l.value ? "var(--text)" : "var(--text-faint)" }}>{fmtMoney(l.value)}</td>
+                <td className="py-6 px-6 text-sm" style={{ color: "var(--text-muted)" }}>{l.source}</td>
               </tr>
             ))}
           </tbody>
@@ -330,21 +343,72 @@ function PipelineTab() {
 
       {/* Notes panel for one selected lead — picking the latest "Site visit booked" */}
       {(() => {
-        const featured = LEADS.find(l => l.status === "Site visit booked");
+        const featured = leads.find(l => l.status === "Site visit booked");
         if (!featured) return null;
         return (
-          <div className="rounded-md p-5" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-3 mb-2">
+          <div className="rounded-md p-6" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+            <div className="flex items-center gap-3 mb-3">
               <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)" }}>Next site visit</span>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{featured.name}</span>
+              <span style={{ fontSize: 14, fontWeight: 600 }}>{featured.name}</span>
               <StatusPill status={featured.status} />
             </div>
-            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
+            <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.7 }}>
               {featured.notes}
             </p>
           </div>
         );
       })()}
+
+      {/* Add Lead modal */}
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ background: "rgba(0,0,0,0.7)" }}>
+          <div className="w-full max-w-md rounded-md flex flex-col" style={{ background: "var(--panel)", border: "1px solid var(--border-strong)" }}>
+            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+              <h3 className="font-semibold" style={{ fontSize: 16 }}>Add new lead</h3>
+              <button onClick={() => setShowAdd(false)} style={{ color: "var(--text-faint)", fontSize: 20, lineHeight: 1 }}>✕</button>
+            </div>
+            <div className="flex flex-col gap-4 px-6 py-5">
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Customer name</label>
+                <input autoFocus value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="e.g. Mr John Smith" className="w-full mt-1.5 px-3 py-2.5 text-sm rounded-sm outline-none" style={{ background: "var(--panel-2)", border: "1px solid var(--border)" }} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Phone</label>
+                  <input value={draft.phone} onChange={(e) => setDraft({ ...draft, phone: e.target.value })} placeholder="07700 900000" className="w-full mt-1.5 px-3 py-2.5 text-sm rounded-sm outline-none" style={{ background: "var(--panel-2)", border: "1px solid var(--border)" }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Postcode</label>
+                  <input value={draft.postcode} onChange={(e) => setDraft({ ...draft, postcode: e.target.value })} placeholder="M20 4DG" className="w-full mt-1.5 px-3 py-2.5 text-sm rounded-sm outline-none" style={{ background: "var(--panel-2)", border: "1px solid var(--border)" }} />
+                </div>
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Job type</label>
+                <input value={draft.jobType} onChange={(e) => setDraft({ ...draft, jobType: e.target.value })} placeholder="e.g. Kitchen extension" className="w-full mt-1.5 px-3 py-2.5 text-sm rounded-sm outline-none" style={{ background: "var(--panel-2)", border: "1px solid var(--border)" }} />
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Source</label>
+                <select value={draft.source} onChange={(e) => setDraft({ ...draft, source: e.target.value })} className="w-full mt-1.5 px-3 py-2.5 text-sm rounded-sm outline-none" style={{ background: "var(--panel-2)", border: "1px solid var(--border)" }}>
+                  <option>Google</option>
+                  <option>Word of mouth</option>
+                  <option>Returning customer</option>
+                  <option>Local directory</option>
+                  <option>Instagram</option>
+                  <option>Facebook</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex gap-3 px-6 py-4" style={{ borderTop: "1px solid var(--border)" }}>
+              <button onClick={() => setShowAdd(false)} className="flex-1 py-2.5 text-sm rounded-sm" style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}>
+                Cancel
+              </button>
+              <button onClick={addLead} disabled={!draft.name.trim()} className="flex-1 py-2.5 text-sm font-semibold rounded-sm transition-opacity hover:opacity-90 disabled:opacity-40" style={{ background: "var(--accent)", color: "#0E1217" }}>
+                Add lead
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -404,11 +468,11 @@ function JobsTab() {
       <div>
         <h2 className="text-xl font-bold tracking-tight mb-5">Recently completed</h2>
         <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-          <table className="w-full text-sm">
+          <table className="w-full" style={{ fontSize: 14 }}>
             <thead>
               <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
                 {["Customer", "Job", "Postcode", "Finished", "Value"].map((h) => (
-                  <th key={h} className="text-left py-4 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                  <th key={h} className="text-left py-3 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -416,8 +480,8 @@ function JobsTab() {
               {completed.map((j) => (
                 <tr key={j.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
                   <td className="py-3 px-4 font-semibold">{j.customer}</td>
-                  <td className="py-5 px-6" style={{ color: "var(--text-muted)" }}>{j.type}</td>
-                  <td className="py-5 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{j.postcode}</td>
+                  <td className="py-6 px-6" style={{ color: "var(--text-muted)" }}>{j.type}</td>
+                  <td className="py-6 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{j.postcode}</td>
                   <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(j.end)}</td>
                   <td className="py-3 px-4 font-semibold">{fmtMoney(j.value)}</td>
                 </tr>
@@ -522,22 +586,22 @@ function QuotesTab() {
       </div>
 
       <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full text-sm">
+        <table className="w-full" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Quote #", "Customer", "Job", "Sent", "Status", "Amount"].map((h) => (
-                <th key={h} className="text-left py-4 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                <th key={h} className="text-left py-3 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map((q) => (
               <tr key={q.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-5 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{q.id}</td>
+                <td className="py-6 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{q.id}</td>
                 <td className="py-3 px-4 font-semibold">{q.customer}</td>
-                <td className="py-5 px-6" style={{ color: "var(--text-muted)" }}>{q.job}</td>
+                <td className="py-6 px-6" style={{ color: "var(--text-muted)" }}>{q.job}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(q.sentOn)}</td>
-                <td className="py-5 px-6"><StatusPill status={q.status} /></td>
+                <td className="py-6 px-6"><StatusPill status={q.status} /></td>
                 <td className="py-3 px-4 font-semibold">{fmtMoney(q.amount)}</td>
               </tr>
             ))}
@@ -581,23 +645,23 @@ function InvoicesTab() {
       </div>
 
       <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full text-sm">
+        <table className="w-full" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Invoice #", "Customer", "Job", "Raised", "Due", "Status", "Amount"].map((h) => (
-                <th key={h} className="text-left py-4 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                <th key={h} className="text-left py-3 px-6" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {INVOICES.map((i) => (
               <tr key={i.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-5 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{i.id}</td>
+                <td className="py-6 px-6" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{i.id}</td>
                 <td className="py-3 px-4 font-semibold">{i.customer}</td>
-                <td className="py-5 px-6" style={{ color: "var(--text-muted)" }}>{i.job}</td>
+                <td className="py-6 px-6" style={{ color: "var(--text-muted)" }}>{i.job}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(i.raisedOn)}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: i.status === "Overdue" ? "#FF8888" : "var(--text-faint)" }}>{fmtDate(i.dueOn)}</td>
-                <td className="py-5 px-6"><StatusPill status={i.status} /></td>
+                <td className="py-6 px-6"><StatusPill status={i.status} /></td>
                 <td className="py-3 px-4 font-semibold">{fmtMoney(i.amount)}</td>
               </tr>
             ))}
