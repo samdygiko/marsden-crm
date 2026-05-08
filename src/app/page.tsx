@@ -173,60 +173,68 @@ export default function MarsdenCRM() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
       {/* Top bar */}
-      <header className="flex items-center gap-6 px-6 py-3" style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
-        <div className="flex items-center gap-2.5">
-          <div style={{ width: 28, height: 28, background: "var(--accent)", borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 14, letterSpacing: "-0.02em" }}>
-            M
+      <header style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
+        <div className="max-w-7xl mx-auto flex items-center gap-8 px-8 py-4">
+          <div className="flex items-center gap-3">
+            <div style={{ width: 30, height: 30, background: "var(--accent)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 15, letterSpacing: "-0.02em" }}>
+              M
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="font-bold tracking-tight" style={{ fontSize: 16 }}>MARSDEN</span>
+              <span style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-faint)" }}>Construction · Manchester</span>
+            </div>
           </div>
-          <div className="flex flex-col leading-tight">
-            <span className="font-bold tracking-tight" style={{ fontSize: 15 }}>MARSDEN</span>
-            <span style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-faint)" }}>Construction · Manchester</span>
+
+          <div className="flex-1" />
+          <div className="flex items-center gap-3 text-xs" style={{ color: "var(--text-muted)" }}>
+            <span>Mark Marsden</span>
+            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,122,26,0.15)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, border: "1px solid rgba(255,122,26,0.3)" }}>
+              MM
+            </div>
           </div>
         </div>
 
-        <nav className="flex items-center gap-1 ml-2">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className="text-sm font-medium px-4 py-2 rounded-sm transition-colors"
-              style={{
-                background: tab === t ? "var(--panel-2)" : "transparent",
-                color: tab === t ? "var(--text)" : "var(--text-muted)",
-                borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
-              }}
-            >
-              {t}
-            </button>
-          ))}
-        </nav>
-
-        <div className="flex-1" />
-        <div className="flex items-center gap-3 text-xs" style={{ color: "var(--text-muted)" }}>
-          <span>Mark Marsden</span>
-          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,122,26,0.15)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, border: "1px solid rgba(255,122,26,0.3)" }}>
-            MM
-          </div>
+        {/* Tab nav — separate row, more space */}
+        <div className="max-w-7xl mx-auto px-8">
+          <nav className="flex items-center gap-1">
+            {TABS.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className="text-sm font-medium px-4 py-3 transition-colors"
+                style={{
+                  background: "transparent",
+                  color: tab === t ? "var(--text)" : "var(--text-muted)",
+                  borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
+                  marginBottom: -1,
+                }}
+              >
+                {t}
+              </button>
+            ))}
+          </nav>
         </div>
       </header>
 
-      {/* Stats strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "var(--border)", borderBottom: "1px solid var(--border)" }}>
-        {[
-          { label: "Open leads", value: openLeadsCount },
-          { label: "Active jobs", value: activeJobsCount },
-          { label: "Customers", value: customersCount },
-          { label: "Outstanding £", value: fmtMoney(totalOutstanding) },
-        ].map((s) => (
-          <div key={s.label} className="px-6 py-4 flex flex-col gap-0.5" style={{ background: "var(--panel)" }}>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-faint)" }}>{s.label}</span>
-            <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em" }}>{s.value}</span>
-          </div>
-        ))}
+      {/* Stats — inside main content width, with breathing room */}
+      <div className="max-w-7xl mx-auto w-full px-8 pt-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: "Open leads", value: openLeadsCount },
+            { label: "Active jobs", value: activeJobsCount },
+            { label: "Customers", value: customersCount },
+            { label: "Outstanding £", value: fmtMoney(totalOutstanding) },
+          ].map((s) => (
+            <div key={s.label} className="px-5 py-5 rounded-md flex flex-col gap-1.5" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-faint)" }}>{s.label}</span>
+              <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.025em" }}>{s.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Tab content */}
-      <main className="flex-1 px-6 py-5">
+      {/* Tab content — constrained width, generous padding */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-8 py-8">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -234,9 +242,11 @@ export default function MarsdenCRM() {
         {tab === "Invoices" && <InvoicesTab />}
       </main>
 
-      <footer className="px-6 py-3 text-xs flex items-center justify-between" style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
-        <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
-        <span>Built by Dygiko · v2.4.1</span>
+      <footer style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
+        <div className="max-w-7xl mx-auto px-8 py-4 text-xs flex items-center justify-between flex-wrap gap-2">
+          <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
+          <span>Built by Dygiko · v2.4.1</span>
+        </div>
       </footer>
     </div>
   );
@@ -257,9 +267,9 @@ function PipelineTab() {
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3 flex-wrap">
-        <h2 className="text-lg font-bold tracking-tight">Lead pipeline</h2>
+        <h2 className="text-xl font-bold tracking-tight">Lead pipeline</h2>
         <span style={{ fontSize: 12, color: "var(--text-faint)" }}>· {filtered.length} of {LEADS.length}</span>
         <div className="flex-1" />
         <input
@@ -288,12 +298,12 @@ function PipelineTab() {
         </button>
       </div>
 
-      <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Customer", "Job type", "Postcode", "Enquired", "Status", "Quote £", "Source"].map((h) => (
-                <th key={h} className="text-left py-2.5 px-4" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>
+                <th key={h} className="text-left py-3 px-5" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>
                   {h}
                 </th>
               ))}
@@ -301,15 +311,15 @@ function PipelineTab() {
           </thead>
           <tbody>
             {filtered.map((l) => (
-              <tr key={l.id} className="hover:bg-[rgba(255,255,255,0.02)]" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-3 px-4">
+              <tr key={l.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
+                <td className="py-4 px-5">
                   <div className="font-semibold">{l.name}</div>
                   <div style={{ fontSize: 11, color: "var(--text-faint)" }}>{l.phone} · {l.id}</div>
                 </td>
-                <td className="py-3 px-4" style={{ color: "var(--text-muted)" }}>{l.jobType}</td>
-                <td className="py-3 px-4" style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, color: "var(--text-muted)" }}>{l.postcode}</td>
+                <td className="py-4 px-5" style={{ color: "var(--text-muted)" }}>{l.jobType}</td>
+                <td className="py-4 px-5" style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, color: "var(--text-muted)" }}>{l.postcode}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(l.enquiredOn)}</td>
-                <td className="py-3 px-4"><StatusPill status={l.status} /></td>
+                <td className="py-4 px-5"><StatusPill status={l.status} /></td>
                 <td className="py-3 px-4 font-semibold" style={{ color: l.value ? "var(--text)" : "var(--text-faint)" }}>{fmtMoney(l.value)}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-muted)" }}>{l.source}</td>
               </tr>
@@ -323,7 +333,7 @@ function PipelineTab() {
         const featured = LEADS.find(l => l.status === "Site visit booked");
         if (!featured) return null;
         return (
-          <div className="rounded-sm p-4" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+          <div className="rounded-md p-5" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
             <div className="flex items-center gap-3 mb-2">
               <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)" }}>Next site visit</span>
               <span style={{ fontSize: 13, fontWeight: 600 }}>{featured.name}</span>
@@ -346,19 +356,19 @@ function JobsTab() {
   const completed = JOBS.filter(j => j.status === "Completed");
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10">
       <div>
-        <div className="flex items-center gap-3 mb-3">
-          <h2 className="text-lg font-bold tracking-tight">This week</h2>
+        <div className="flex items-center gap-3 mb-5">
+          <h2 className="text-xl font-bold tracking-tight">This week</h2>
           <span style={{ fontSize: 12, color: "var(--text-faint)" }}>· {active.length} live job{active.length !== 1 ? "s" : ""}</span>
           <div className="flex-1" />
           <button className="text-xs font-semibold px-3 py-1.5 rounded-sm" style={{ background: "var(--accent)", color: "#0E1217" }}>
             + Schedule job
           </button>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {active.map((j) => (
-            <div key={j.id} className="rounded-sm p-4 flex flex-col gap-2" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+            <div key={j.id} className="rounded-md p-5 flex flex-col gap-3" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
               <div className="flex items-center justify-between gap-2">
                 <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{j.id}</span>
                 <StatusPill status={j.status} />
@@ -392,22 +402,22 @@ function JobsTab() {
       </div>
 
       <div>
-        <h2 className="text-lg font-bold tracking-tight mb-3">Recently completed</h2>
+        <h2 className="text-xl font-bold tracking-tight mb-5">Recently completed</h2>
         <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
                 {["Customer", "Job", "Postcode", "Finished", "Value"].map((h) => (
-                  <th key={h} className="text-left py-2.5 px-4" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                  <th key={h} className="text-left py-3 px-5" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {completed.map((j) => (
-                <tr key={j.id} className="hover:bg-[rgba(255,255,255,0.02)]" style={{ borderBottom: "1px solid var(--border)" }}>
+                <tr key={j.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
                   <td className="py-3 px-4 font-semibold">{j.customer}</td>
-                  <td className="py-3 px-4" style={{ color: "var(--text-muted)" }}>{j.type}</td>
-                  <td className="py-3 px-4" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{j.postcode}</td>
+                  <td className="py-4 px-5" style={{ color: "var(--text-muted)" }}>{j.type}</td>
+                  <td className="py-4 px-5" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{j.postcode}</td>
                   <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(j.end)}</td>
                   <td className="py-3 px-4 font-semibold">{fmtMoney(j.value)}</td>
                 </tr>
@@ -430,7 +440,7 @@ function CustomersTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <h2 className="text-lg font-bold tracking-tight">Customers</h2>
+        <h2 className="text-xl font-bold tracking-tight">Customers</h2>
         <span style={{ fontSize: 12, color: "var(--text-faint)" }}>· {filtered.length} of {CUSTOMERS.length} · {fmtMoney(totalLifetime)} lifetime value</span>
         <div className="flex-1" />
         <input
@@ -446,9 +456,9 @@ function CustomersTab() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map((c) => (
-          <div key={c.id} className="rounded-sm p-4 flex flex-col gap-2" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+          <div key={c.id} className="rounded-md p-5 flex flex-col gap-3" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
             <div className="flex items-center justify-between">
               <div className="font-semibold">{c.name}</div>
               <span style={{ fontSize: 10, color: "var(--text-faint)" }}>{c.id}</span>
@@ -491,7 +501,7 @@ function QuotesTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <h2 className="text-lg font-bold tracking-tight">Quotes</h2>
+        <h2 className="text-xl font-bold tracking-tight">Quotes</h2>
         <span style={{ fontSize: 12, color: "var(--text-faint)" }}>· {fmtMoney(pendingTotal)} pending</span>
         <div className="flex-1" />
         <select
@@ -511,23 +521,23 @@ function QuotesTab() {
         </button>
       </div>
 
-      <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Quote #", "Customer", "Job", "Sent", "Status", "Amount"].map((h) => (
-                <th key={h} className="text-left py-2.5 px-4" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                <th key={h} className="text-left py-3 px-5" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map((q) => (
-              <tr key={q.id} className="hover:bg-[rgba(255,255,255,0.02)]" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-3 px-4" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{q.id}</td>
+              <tr key={q.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
+                <td className="py-4 px-5" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{q.id}</td>
                 <td className="py-3 px-4 font-semibold">{q.customer}</td>
-                <td className="py-3 px-4" style={{ color: "var(--text-muted)" }}>{q.job}</td>
+                <td className="py-4 px-5" style={{ color: "var(--text-muted)" }}>{q.job}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(q.sentOn)}</td>
-                <td className="py-3 px-4"><StatusPill status={q.status} /></td>
+                <td className="py-4 px-5"><StatusPill status={q.status} /></td>
                 <td className="py-3 px-4 font-semibold">{fmtMoney(q.amount)}</td>
               </tr>
             ))}
@@ -548,46 +558,46 @@ function InvoicesTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <h2 className="text-lg font-bold tracking-tight">Invoices</h2>
+        <h2 className="text-xl font-bold tracking-tight">Invoices</h2>
         <div className="flex-1" />
         <button className="text-xs font-semibold px-3 py-1.5 rounded-sm" style={{ background: "var(--accent)", color: "#0E1217" }}>
           + Raise invoice
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="rounded-sm p-4" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="rounded-md p-5" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
           <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>Outstanding</div>
           <div className="font-bold mt-1" style={{ fontSize: 24, letterSpacing: "-0.02em" }}>{fmtMoney(outstanding)}</div>
         </div>
-        <div className="rounded-sm p-4" style={{ background: "var(--panel)", border: "1px solid rgba(239,68,68,0.3)" }}>
+        <div className="rounded-md p-5" style={{ background: "var(--panel)", border: "1px solid rgba(239,68,68,0.3)" }}>
           <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#FF8888" }}>Overdue</div>
           <div className="font-bold mt-1" style={{ fontSize: 24, letterSpacing: "-0.02em", color: "#FF8888" }}>{fmtMoney(overdue)}</div>
         </div>
-        <div className="rounded-sm p-4" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+        <div className="rounded-md p-5" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
           <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>Paid this month</div>
           <div className="font-bold mt-1" style={{ fontSize: 24, letterSpacing: "-0.02em", color: "#7FECA1" }}>{fmtMoney(paidThisMonth)}</div>
         </div>
       </div>
 
-      <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Invoice #", "Customer", "Job", "Raised", "Due", "Status", "Amount"].map((h) => (
-                <th key={h} className="text-left py-2.5 px-4" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
+                <th key={h} className="text-left py-3 px-5" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {INVOICES.map((i) => (
-              <tr key={i.id} className="hover:bg-[rgba(255,255,255,0.02)]" style={{ borderBottom: "1px solid var(--border)" }}>
-                <td className="py-3 px-4" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{i.id}</td>
+              <tr key={i.id} className="hover:bg-[rgba(255,255,255,0.025)] transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
+                <td className="py-4 px-5" style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--text-muted)" }}>{i.id}</td>
                 <td className="py-3 px-4 font-semibold">{i.customer}</td>
-                <td className="py-3 px-4" style={{ color: "var(--text-muted)" }}>{i.job}</td>
+                <td className="py-4 px-5" style={{ color: "var(--text-muted)" }}>{i.job}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: "var(--text-faint)" }}>{fmtDate(i.raisedOn)}</td>
                 <td className="py-3 px-4 text-xs" style={{ color: i.status === "Overdue" ? "#FF8888" : "var(--text-faint)" }}>{fmtDate(i.dueOn)}</td>
-                <td className="py-3 px-4"><StatusPill status={i.status} /></td>
+                <td className="py-4 px-5"><StatusPill status={i.status} /></td>
                 <td className="py-3 px-4 font-semibold">{fmtMoney(i.amount)}</td>
               </tr>
             ))}
