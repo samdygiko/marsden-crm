@@ -174,7 +174,7 @@ export default function MarsdenCRM() {
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
       {/* Top bar */}
       <header style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
-        <div className="flex items-center gap-8 px-10 py-5">
+        <div className="flex items-center gap-8 px-16 py-5">
           <div className="flex items-center gap-3">
             <div style={{ width: 30, height: 30, background: "var(--accent)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 15, letterSpacing: "-0.02em" }}>
               M
@@ -195,7 +195,7 @@ export default function MarsdenCRM() {
         </div>
 
         {/* Tab nav — separate row, more space */}
-        <div className="px-10">
+        <div className="px-16">
           <nav className="flex items-center gap-2">
             {TABS.map((t) => (
               <button
@@ -220,7 +220,7 @@ export default function MarsdenCRM() {
       </header>
 
       {/* Stats — inside main content width, with breathing room */}
-      <div className="px-10 pt-10 w-full">
+      <div className="px-16 pt-10 w-full">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {[
             { label: "Open leads", value: openLeadsCount },
@@ -237,7 +237,7 @@ export default function MarsdenCRM() {
       </div>
 
       {/* Tab content — constrained width, generous padding */}
-      <main className="flex-1 px-10 py-12 w-full">
+      <main className="flex-1 px-16 py-12 w-full">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -246,7 +246,7 @@ export default function MarsdenCRM() {
       </main>
 
       <footer style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
-        <div className="px-10 py-5 text-xs flex items-center justify-between flex-wrap gap-2">
+        <div className="px-16 py-5 text-xs flex items-center justify-between flex-wrap gap-2">
           <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
           <span>Built by Dygiko · v2.4.1</span>
         </div>
