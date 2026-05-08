@@ -196,17 +196,20 @@ export default function MarsdenCRM() {
 
         {/* Tab nav — separate row, more space */}
         <div className="px-10">
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-2">
             {TABS.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className="text-sm font-medium px-4 py-3 transition-colors"
+                className="font-medium transition-colors"
                 style={{
+                  fontSize: 14,
+                  padding: "14px 22px",
                   background: "transparent",
                   color: tab === t ? "var(--text)" : "var(--text-muted)",
                   borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
                   marginBottom: -1,
+                  letterSpacing: "0.01em",
                 }}
               >
                 {t}
