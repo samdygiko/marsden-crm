@@ -174,7 +174,7 @@ export default function MarsdenCRM() {
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
       {/* Top bar */}
       <header style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
-        <div style={{ paddingLeft: 96, paddingRight: 96, paddingTop: 20, paddingBottom: 20 }} className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-8 px-4 sm:px-6 lg:px-24 py-4">
           <div className="flex items-center gap-3">
             <div style={{ width: 30, height: 30, background: "var(--accent)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 15, letterSpacing: "-0.02em" }}>
               M
@@ -195,8 +195,8 @@ export default function MarsdenCRM() {
         </div>
 
         {/* Tab nav — separate row, more space */}
-        <div style={{ paddingLeft: 96, paddingRight: 96 }}>
-          <nav className="flex items-center gap-2">
+        <div className="px-4 sm:px-6 lg:px-24 overflow-x-auto">
+          <nav className="flex items-center gap-2 min-w-max">
             {TABS.map((t) => (
               <button
                 key={t}
@@ -220,8 +220,8 @@ export default function MarsdenCRM() {
       </header>
 
       {/* Stats — inside main content width, with breathing room */}
-      <div style={{ paddingLeft: 96, paddingRight: 96, paddingTop: 40, width: "100%" }}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <div className="w-full px-4 sm:px-6 lg:px-24 pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
           {[
             { label: "Open leads", value: openLeadsCount },
             { label: "Active jobs", value: activeJobsCount },
@@ -237,7 +237,7 @@ export default function MarsdenCRM() {
       </div>
 
       {/* Tab content — constrained width, generous padding */}
-      <main style={{ paddingLeft: 96, paddingRight: 96, paddingTop: 48, paddingBottom: 48, width: "100%" }} className="flex-1">
+      <main className="flex-1 w-full px-4 sm:px-6 lg:px-24 py-8 sm:py-12">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -246,7 +246,7 @@ export default function MarsdenCRM() {
       </main>
 
       <footer style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
-        <div style={{ paddingLeft: 96, paddingRight: 96, paddingTop: 20, paddingBottom: 20 }} className="text-xs flex items-center justify-between flex-wrap gap-2">
+        <div className="text-xs flex items-center justify-between flex-wrap gap-2 px-4 sm:px-6 lg:px-24 py-4">
           <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
           <span>Built by Dygiko · v2.4.1</span>
         </div>
@@ -314,8 +314,8 @@ function PipelineTab() {
         </button>
       </div>
 
-      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full" style={{ fontSize: 14 }}>
+      <div className="rounded-md overflow-x-auto" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+        <table className="w-full min-w-[760px]" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Customer", "Job type", "Postcode", "Enquired", "Status", "Quote £", "Source"].map((h) => (
@@ -470,8 +470,8 @@ function JobsTab() {
 
       <div>
         <h2 className="text-xl font-bold tracking-tight mb-5">Recently completed</h2>
-        <div className="rounded-sm overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-          <table className="w-full" style={{ fontSize: 14 }}>
+        <div className="rounded-sm overflow-x-auto" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+          <table className="w-full min-w-[640px]" style={{ fontSize: 14 }}>
             <thead>
               <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
                 {["Customer", "Job", "Postcode", "Finished", "Value"].map((h) => (
@@ -588,8 +588,8 @@ function QuotesTab() {
         </button>
       </div>
 
-      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full" style={{ fontSize: 14 }}>
+      <div className="rounded-md overflow-x-auto" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+        <table className="w-full min-w-[680px]" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Quote #", "Customer", "Job", "Sent", "Status", "Amount"].map((h) => (
@@ -647,8 +647,8 @@ function InvoicesTab() {
         </div>
       </div>
 
-      <div className="rounded-md overflow-hidden" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
-        <table className="w-full" style={{ fontSize: 14 }}>
+      <div className="rounded-md overflow-x-auto" style={{ background: "var(--panel)", border: "1px solid var(--border)" }}>
+        <table className="w-full min-w-[760px]" style={{ fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--panel-2)", borderBottom: "1px solid var(--border)" }}>
               {["Invoice #", "Customer", "Job", "Raised", "Due", "Status", "Amount"].map((h) => (
