@@ -174,7 +174,7 @@ export default function MarsdenCRM() {
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
       {/* Top bar */}
       <header style={{ borderBottom: "1px solid var(--border)", background: "var(--panel)" }}>
-        <div className="flex items-center gap-4 sm:gap-8 mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-14 py-4">
+        <div className="flex items-center gap-4 sm:gap-8 page-shell py-4">
           <div className="flex items-center gap-3">
             <div style={{ width: 30, height: 30, background: "var(--accent)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#0E1217", fontWeight: 800, fontSize: 15, letterSpacing: "-0.02em" }}>
               M
@@ -195,7 +195,7 @@ export default function MarsdenCRM() {
         </div>
 
         {/* Tab nav — separate row, more space */}
-        <div className="mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-14 overflow-x-auto">
+        <div className="page-shell overflow-x-auto">
           <nav className="flex items-center gap-2 min-w-max">
             {TABS.map((t) => (
               <button
@@ -220,7 +220,7 @@ export default function MarsdenCRM() {
       </header>
 
       {/* Stats — inside main content width, with breathing room */}
-      <div className="w-full mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-14 pt-10">
+      <div className="w-full page-shell pt-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
           {[
             { label: "Open leads", value: openLeadsCount },
@@ -237,7 +237,7 @@ export default function MarsdenCRM() {
       </div>
 
       {/* Tab content — constrained width, generous padding */}
-      <main className="flex-1 w-full mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-14 py-8 sm:py-12">
+      <main className="flex-1 w-full page-shell py-8 sm:py-12">
         {tab === "Pipeline" && <PipelineTab />}
         {tab === "Jobs" && <JobsTab />}
         {tab === "Customers" && <CustomersTab />}
@@ -246,7 +246,7 @@ export default function MarsdenCRM() {
       </main>
 
       <footer style={{ borderTop: "1px solid var(--border)", color: "var(--text-faint)" }}>
-        <div className="text-xs flex items-center justify-between flex-wrap gap-2 mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-14 py-4">
+        <div className="text-xs flex items-center justify-between flex-wrap gap-2 page-shell py-4">
           <span>Marsden Construction Ltd · Reg. England 09483771 · VAT GB 224 8852 14</span>
           <span>Built by Dygiko · v2.4.1</span>
         </div>
